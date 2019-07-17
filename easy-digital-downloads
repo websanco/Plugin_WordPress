@@ -1,2 +1,3 @@
 easy-digital-downloads/includes/emails/functions.php 
 Remove 119 // //$emails->send( $to_email, $subject, $message, $attachments );
+$emails->send ( remove) 
