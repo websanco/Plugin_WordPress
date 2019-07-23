@@ -1,0 +1,12 @@
+add_action( 'widgets_init', create_function( '', 'register_widget("Widget_Name");' ) );  
+
+Should do this instead.  
+
+function sth_register_widgets() {  
+	register_widget( 'Widget_Name' );  
+}
+add_action( 'widgets_init', 'sth_register_widgets' );  
+
+// OR:  
+
+add_action( 'widgets_init', function() { register_widget( 'Widget_Name' ); } );  
