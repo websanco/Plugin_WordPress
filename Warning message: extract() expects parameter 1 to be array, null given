@@ -1,0 +1,6 @@
+
+
+if(empty($color_set) || empty($main_color) || empty($styles)) return;
+extract($color_set);
+extract($main_color);
+extract($styles);
