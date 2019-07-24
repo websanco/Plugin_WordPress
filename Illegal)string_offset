@@ -26,3 +26,7 @@ require plugin_dir_path( __FILE__ ) . 'class-advanced-menu-footer.php';
 
 
 
+$instance is an array. $instance['param1'] is an array reference. Maybe you are wondering why it’s not an object, 
+referenced as $instance->param1?
+
+Useful functions that you should find useful are extract() and array_map().
