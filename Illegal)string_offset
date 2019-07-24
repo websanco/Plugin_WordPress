@@ -1,2 +1,28 @@
 
 if (!empty($agrr_review['rating']))  
+
+
+
+Warning: Illegal string offset in Plugin WordPress
+
+CALL FALSE
+
+if (! defined ( 'WP_CONTENT_URL' ))
+	define ( 'WP_CONTENT_URL', get_option ( 'siteurl' ) . '/wp-content' );
+if (! defined ( 'WP_CONTENT_DIR' ))
+	define ( 'WP_CONTENT_DIR', ABSPATH . 'wp-content' );
+if (! defined ( 'WP_PLUGIN_URL' ))
+	define ( 'WP_PLUGIN_URL', WP_CONTENT_URL . '/plugins' );
+if (! defined ( 'WP_PLUGIN_DIR' ))
+	define ( 'WP_PLUGIN_DIR', WP_CONTENT_DIR . '/plugins' );
+  
+  
+  
+  ==> REMOVE
+  
+  
+ require plugin_dir_path( __FILE__ ) . 'class-advanced-menu-walker-footer.php';
+require plugin_dir_path( __FILE__ ) . 'class-advanced-menu-footer.php';	
+
+
+
