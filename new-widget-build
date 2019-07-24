@@ -1,0 +1,128 @@
+/**
+ * Alliance_Post_Builder widget class
+ *
+ * @since 1.0.0
+*/
+class Alliance_Post_Builder extends WP_Widget {
+
+    public function __construct() {
+    parent::__construct(
+        'alliance_post_builder', // Base ID
+        __( 'Alliance post builder', 'alliance' ), // Name
+        array( 'description' => __( 'A post builder', 'alliance' ), ) // Args
+    );
+        $this->alt_option_name = 'widget_alliance_posts';
+
+        add_action( 'save_post', array($this, 'flush_widget_cache') );
+        add_action( 'deleted_post', array($this, 'flush_widget_cache') );
+        add_action( 'switch_theme', array($this, 'flush_widget_cache') );
+    }
+
+    public function widget( $args, $instance ) {
+        $cache = array();
+        if ( ! $this->is_preview() ) {
+            $cache = wp_cache_get( 'widget_alliance_build_posts', 'widget' );
+        }
+
+        if ( ! is_array( $cache ) ) {
+            $cache = array();
+        }
+
+        if ( ! isset( $args['widget_id'] ) ) {
+            $args['widget_id'] = $this->id;
+        }
+
+        if ( isset( $cache[ $args['widget_id'] ] ) ) {
+            echo $cache[ $args['widget_id'] ];
+            return;
+        }
+
+        ob_start();
+
+        $title          = ( ! empty( $instance['title'] ) ) ? $instance['title'] : __( 'A new section', 'alliance' );
+        /** This filter is documented in wp-includes/default-widgets.php */
+        $title          = apply_filters( 'widget_title', $title, $instance, $this->id_base );
+        $sectionID      = ( ! empty( $instance['sectionID'] ) ) ? $instance['sectionID'] : __( 'A new section', 'alliance' );
+        $category       = $instance['category'];  
+
+
+        ?><section id="<?php echo $sectionID; ?>"><?php
+
+        echo $args['before_widget'];
+        if ( $title ) {
+            echo $args['before_title'] . $title . $args['after_title'];
+        }               
+        echo "SOMETHING IS MISSING HERE";
+
+        echo $args['after_widget']; 
+
+        ?></section><?php
+
+        if ( ! $this->is_preview() ) {
+            $cache[ $args['widget_id'] ] = ob_get_flush();
+            wp_cache_set( 'widget_alliance_build_posts', $cache, 'widget' );
+        } else {
+            ob_end_flush();
+        }
+    }
+
+    public function update( $new_instance, $old_instance ) {
+        $instance                   = $old_instance;
+        $instance['title']          = strip_tags( $new_instance['title'] );
+        $instance['sectionID']      = strip_tags( $new_instance['sectionID'] );
+        $instance['category']       = $new_instance['category'];
+        $this->flush_widget_cache();
+
+        $alloptions = wp_cache_get( 'alloptions', 'options' );
+        if ( isset($alloptions['widget_alliance_posts']) )
+            delete_option('widget_alliance_posts');
+
+        return $instance;
+    }
+
+    public function flush_widget_cache() {
+        wp_cache_delete('widget_alliance_build_posts', 'widget');
+    }
+
+    public function form( $instance ) {
+
+        $title      = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
+        $sectionID  = isset( $instance['sectionID'] ) ? esc_attr( $instance['sectionID'] ) : '';
+        $category   = isset( $instance['category'] ) ? $instance['category'] : -1;
+        ?>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'sectionID' ); ?>"><?php _e( 'Section Id:' ); ?></label> 
+            <input class="widefat" id="<?php echo $this->get_field_id( 'sectionID' ); ?>" name="<?php echo $this->get_field_name( 'sectionID' ); ?>" type="text" value="<?php echo esc_attr( $sectionID ); ?>">
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label>
+            <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo $title; ?>" />
+        </p>
+
+        <p>
+            <label for="<?php echo $this->get_field_id('category'); ?>"><?php _e( 'Category Name:' )?></label>
+            <select id="<?php echo $this->get_field_id('category'); ?>" name="<?php echo $this->get_field_name('category'); ?>">
+                <?php 
+                $this->categories = get_categories();
+                foreach ( $this->categories as $cat ) {
+                    $selected = ( $cat->term_id == esc_attr( $category ) ) ? ' selected = "selected" ' : '';
+                    $option = '<option '.$selected .'value="' . $cat->term_id;
+                    $option = $option .'">';
+                    $option = $option .$cat->name;
+                    $option = $option .'</option>';
+                    echo $option;
+                }
+                ?>
+            </select>
+        </p>
+
+    <?php
+    }
+
+}
+
+add_action( 'widgets_init', function () {
+    register_widget( 'Alliance_Post_Builder' );
+}); 
