@@ -1,0 +1,6 @@
+class-facebook-login-public
+
+wp-content/plugins/wp-facebook-login/public
+
+remove 648
+wp_new_user_notification( $user_id,'','user' );
