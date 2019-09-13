@@ -1,4 +1,3 @@
-
 // add widget
 
 class form_lien_he extends WP_Widget {
@@ -14,19 +13,54 @@ class form_lien_he extends WP_Widget {
   
   
     /** @see WP_Widget::widget hien thi ra ben ngoai */
-    
-    
+	
+	 public function widget($args, $instance)
+    {
+        extract($args);
+        
+        $title = apply_filters('title', isset($instance['title']) ? esc_attr($instance['title']) : '');
+        $category = apply_filters('category', isset($instance['category']) ? esc_attr($instance['category']) : '');
+        $count = apply_filters('count', isset($instance['count']) && is_numeric($instance['count']) ? esc_attr($instance['count']) : '');
+        $orderby = apply_filters('orderby', isset($instance['orderby']) ? $instance['orderby'] : '');
+        $order = apply_filters('order', isset($instance['order']) ? $instance['order'] : '');
+        $width = apply_filters('width', isset($instance['width']) && is_numeric($instance['width']) ?(int)$instance['width'] : 240);
+        $height = apply_filters('height', isset($instance['height']) && is_numeric($instance['height']) ?(int)$instance['height'] : 140);
+        $length = apply_filters('length', isset($instance['length']) && is_numeric($instance['length']) ?(int)$instance['length'] : 200);
+       
+
+        echo $before_widget;
+        if(!empty($title)) {
+            echo $before_title . $title . $after_title;
+        }
+?>
+<!-- NOI DUNG-->
+
+
+<!-- NOI DUNG-->
+
+<?php
+	echo $after_widget;
+	}
+	
+	/*END SHOW*/
 	
 	 /** @update WP_Widget::update luu khi nguoi dung save  */
-   
-   
-   
+	  public function update($new_instance, $old_instance)
+    {
+        return $new_instance;
+    }
+	 
 	 
 	  /** @form WP_Widget::form nhap lieu */
-    
-    
 	 
 	 
+	  public function form($instance) {
+		  
+		  
+		  
+	  }
+  
+	
 }
 
 add_action( 'widgets_init', function() { register_widget( 'form_lien_he' ); } );
