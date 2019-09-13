@@ -1,0 +1,34 @@
+
+// add widget
+
+class form_lien_he extends WP_Widget {
+	
+	
+	   function __construct() {
+    parent::__construct(
+      'form_lien_he', 
+      __('BDS_Form_Lien_He', 'text_domain'),
+      array( 'description' => __( 'From Liên Hệ', 'text_domain' ), )
+    );
+  }
+  
+  
+    /** @see WP_Widget::widget hien thi ra ben ngoai */
+    
+    
+	
+	 /** @update WP_Widget::update luu khi nguoi dung save  */
+   
+   
+   
+	 
+	  /** @form WP_Widget::form nhap lieu */
+    
+    
+	 
+	 
+}
+
+add_action( 'widgets_init', function() { register_widget( 'form_lien_he' ); } );
+
+// end add widget
